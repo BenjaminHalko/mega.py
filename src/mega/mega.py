@@ -700,9 +700,7 @@ class Mega:
         else:
             dest_path += '/'
 
-        with tempfile.NamedTemporaryFile(mode='w+b',
-                                         prefix='megapy_',
-                                         delete=False) as temp_output_file:
+        with open(dest_path + file_name, 'wb') as temp_output_file:
             k_str = a32_to_str(k)
             counter = Counter.new(128,
                                   initial_value=((iv[0] << 32) + iv[1]) << 64)
@@ -757,9 +755,7 @@ class Mega:
             if (file_mac[0] ^ file_mac[1],
                     file_mac[2] ^ file_mac[3]) != meta_mac:
                 raise ValueError('Mismatched mac')
-            output_path = Path(dest_path + file_name)
-            shutil.move(temp_output_file.name, output_path)
-            return output_path
+        return Path(dest_path + file_name)
 
     def upload(self, filename, dest=None, dest_filename=None):
         # determine storage node
